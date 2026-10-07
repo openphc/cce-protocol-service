@@ -1,9 +1,13 @@
 {
+  "resourceType": "PlanDefinition",
   "id": "rmnch-protocol",
   "url": "http://mdtlabs.com/PlanDefinition/rmnch-protocol",
   "date": "2026-05-25",
   "name": "RMNCHProtocol",
   "title": "RMNCH \u2014 Reproductive, Maternal, Newborn & Child Health Protocol",
+  "status": "active",
+  "version": "1.0.0",
+  "description": "RMNCH protocol with step-inside-step nesting.",
   "action": [
     {
       "id": "registration",
@@ -1232,9 +1236,5 @@
       ],
       "requiredBehavior": "could"
     }
-  ],
-  "status": "active",
-  "version": "1.0.0",
-  "description": "RMNCH protocol with step-inside-step nesting.",
-  "resourceType": "PlanDefinition"
+  ]
 }

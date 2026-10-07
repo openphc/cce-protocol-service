@@ -1,9 +1,13 @@
 {
+  "resourceType": "PlanDefinition",
   "id": "emr-service-protocol",
   "url": "http://openphc.org/PlanDefinition/emr-service-protocol",
   "date": "2026-06-22",
   "name": "EmrServiceProtocol",
   "title": "EMR Service Diabetes Screening & Management Protocol",
+  "status": "active",
+  "version": "1.0.0",
+  "description": "Tracks an outpatient visit workflow from the Ebuzima HIE: nursing-station check-in (VISIT_ENCOUNTER), vitals recording, then a clinical consultation (CONSULTATION_ENCOUNTER) whose sub-steps cover chief complaints, history, laboratory ordering and results, diagnosis, treatment prescription, and referral. Designed to match CloudEvents from the OpenHIM mediator carrying FHIR R4 resources.",
   "action": [
     {
       "id": "visit-encounter",
@@ -34,7 +38,7 @@
       "timingTiming": {
         "repeat": { "count": 1, "period": 1, "frequency": 1, "periodUnit": "d" }
       },
-      "requiredBehavior": "must"
+      "requiredBehavior": "could"
     },
     {
       "id": "vitals-recording",
@@ -72,7 +76,7 @@
         {
           "actionId": "visit-encounter",
           "relationship": "after-start",
-          "offsetDuration": { "code": "d", "unit": "d", "value": 0, "system": "http://unitsofmeasure.org" }
+          "offsetDuration": { "code": "d", "unit": "d", "value": 1, "system": "http://unitsofmeasure.org" }
         }
       ],
       "requiredBehavior": "must"
@@ -113,7 +117,7 @@
         {
           "actionId": "vitals-recording",
           "relationship": "after-end",
-          "offsetDuration": { "code": "d", "unit": "d", "value": 0, "system": "http://unitsofmeasure.org" }
+          "offsetDuration": { "code": "d", "unit": "d", "value": 1, "system": "http://unitsofmeasure.org" }
         }
       ],
       "requiredBehavior": "must",
@@ -143,9 +147,6 @@
               "type": "named-event"
             }
           ],
-          "extension": [
-            { "url": "http://openphc.org/fhir/StructureDefinition/tolerance-days", "valueInteger": 1 }
-          ],
           "description": "Clinical consultation - chief complaints recording. Matches Observation with LOINC code 33747-0 (Chief Complaints).",
           "timingTiming": {
             "repeat": { "count": 1, "period": 1, "frequency": 1, "periodUnit": "d" }
@@ -154,10 +155,10 @@
             {
               "actionId": "consultation",
               "relationship": "after-end",
-              "offsetDuration": { "code": "d", "unit": "d", "value": 0, "system": "http://unitsofmeasure.org" }
+              "offsetDuration": { "code": "d", "unit": "d", "value": 1, "system": "http://unitsofmeasure.org" }
             }
           ],
-          "requiredBehavior": "must"
+          "requiredBehavior": "could"
         },
         {
           "id": "history-assessment",
@@ -192,7 +193,7 @@
             {
               "actionId": "chief-complaints",
               "relationship": "after-end",
-              "offsetDuration": { "code": "d", "unit": "d", "value": 0, "system": "http://unitsofmeasure.org" }
+              "offsetDuration": { "code": "d", "unit": "d", "value": 1, "system": "http://unitsofmeasure.org" }
             }
           ],
           "requiredBehavior": "could"
@@ -212,9 +213,6 @@
               "type": "named-event"
             }
           ],
-          "extension": [
-            { "url": "http://openphc.org/fhir/StructureDefinition/tolerance-days", "valueInteger": 1 }
-          ],
           "description": "Lab test ordered by clinician. Matches any ServiceRequest (F1 scenario). Ebuzima ServiceRequest payloads have non-standard category structure (object instead of array), so only resource-type matching is used.",
           "timingTiming": {
             "repeat": { "count": 1, "period": 1, "frequency": 1, "periodUnit": "d" }
@@ -223,10 +221,10 @@
             {
               "actionId": "history-assessment",
               "relationship": "after-end",
-              "offsetDuration": { "code": "d", "unit": "d", "value": 0, "system": "http://unitsofmeasure.org" }
+              "offsetDuration": { "code": "d", "unit": "d", "value": 1, "system": "http://unitsofmeasure.org" }
             }
           ],
-          "requiredBehavior": "must",
+          "requiredBehavior": "could",
           "action": [
             {
               "id": "lab-results",
@@ -253,9 +251,6 @@
                   "type": "named-event"
                 }
               ],
-              "extension": [
-                { "url": "http://openphc.org/fhir/StructureDefinition/tolerance-days", "valueInteger": 5 }
-              ],
               "description": "Lab results returned. Matches Observation with category laboratory. Uses category-path codeFilter to distinguish from vital-signs and survey observations. Sub-step of lab-order.",
               "timingTiming": {
                 "repeat": { "count": 1, "period": 1, "frequency": 1, "periodUnit": "d" }
@@ -267,7 +262,7 @@
                   "offsetDuration": { "code": "d", "unit": "d", "value": 3, "system": "http://unitsofmeasure.org" }
                 }
               ],
-              "requiredBehavior": "must"
+              "requiredBehavior": "could"
             }
           ]
         },
@@ -307,7 +302,7 @@
             {
               "actionId": "lab-results",
               "relationship": "after-end",
-              "offsetDuration": { "code": "d", "unit": "d", "value": 1, "system": "http://unitsofmeasure.org" }
+              "offsetDuration": { "code": "d", "unit": "d", "value": 2, "system": "http://unitsofmeasure.org" }
             }
           ],
           "requiredBehavior": "must"
@@ -327,9 +322,6 @@
               "type": "named-event"
             }
           ],
-          "extension": [
-            { "url": "http://openphc.org/fhir/StructureDefinition/tolerance-days", "valueInteger": 1 }
-          ],
           "description": "Medication prescribed. Matches any MedicationRequest (F1 scenario). Ebuzima payloads use medicationCodeableConcept which is not in the standard extraction paths, so only resource-type matching is used. Expected medications: CAPTOPRIL 25MG (C09AA0101E), METFORMIN 500MG (A10BA0201E).",
           "timingTiming": {
             "repeat": { "count": 1, "period": 1, "frequency": 1, "periodUnit": "d" }
@@ -338,10 +330,10 @@
             {
               "actionId": "diagnosis",
               "relationship": "after-end",
-              "offsetDuration": { "code": "d", "unit": "d", "value": 0, "system": "http://unitsofmeasure.org" }
+              "offsetDuration": { "code": "d", "unit": "d", "value": 1, "system": "http://unitsofmeasure.org" }
             }
           ],
-          "requiredBehavior": "must"
+          "requiredBehavior": "could"
         },
         {
           "id": "referral",
@@ -376,16 +368,12 @@
             {
               "actionId": "treatment",
               "relationship": "after-end",
-              "offsetDuration": { "code": "d", "unit": "d", "value": 0, "system": "http://unitsofmeasure.org" }
+              "offsetDuration": { "code": "d", "unit": "d", "value": 1, "system": "http://unitsofmeasure.org" }
             }
           ],
           "requiredBehavior": "could"
         }
       ]
     }
-  ],
-  "status": "active",
-  "version": "1.0.2",
-  "description": "Tracks an outpatient visit workflow from the Ebuzima HIE: nursing-station check-in (VISIT_ENCOUNTER), vitals recording, then a clinical consultation (CONSULTATION_ENCOUNTER) whose sub-steps cover chief complaints, history, laboratory ordering and results, diagnosis, treatment prescription, and referral. Designed to match CloudEvents from the OpenHIM mediator carrying FHIR R4 resources.",
-  "resourceType": "PlanDefinition"
+  ]
 }

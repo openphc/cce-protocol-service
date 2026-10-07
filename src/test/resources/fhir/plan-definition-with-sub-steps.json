@@ -1,9 +1,13 @@
 {
+  "resourceType": "PlanDefinition",
   "id": "rmnch-protocol-sub-steps",
   "url": "http://mdtlabs.com/PlanDefinition/rmnch-protocol-sub-steps",
   "date": "2026-05-25",
   "name": "RMNCHProtocolSubSteps",
   "title": "RMNCH Protocol — Step-Inside-Step for ANC Visits",
+  "status": "active",
+  "version": "1.0.0",
+  "description": "RMNCH protocol with step-inside-step nesting. ANC visit chain uses steps with nested sub-steps: Visit 1 (Referral → Ack) → Visit 2 (Referral → Ack) → Visit 3 (Referral → Ack). Each parent step has triggers AND sub-steps — sub-steps are created after parent completion.",
   "action": [
     {
       "id": "registration",
@@ -1027,9 +1031,5 @@
         ]
       }
     }
-  ],
-  "status": "active",
-  "version": "1.0.0",
-  "description": "RMNCH protocol with step-inside-step nesting. ANC visit chain uses steps with nested sub-steps: Visit 1 (Referral → Ack) → Visit 2 (Referral → Ack) → Visit 3 (Referral → Ack). Each parent step has triggers AND sub-steps — sub-steps are created after parent completion.",
-  "resourceType": "PlanDefinition"
+  ]
 }

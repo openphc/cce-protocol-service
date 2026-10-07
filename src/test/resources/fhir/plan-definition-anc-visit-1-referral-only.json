@@ -1,9 +1,13 @@
 {
+  "resourceType": "PlanDefinition",
   "id": "anc-visit-1-referral-protocol",
   "url": "http://mdtlabs.com/PlanDefinition/anc-visit-1-referral-protocol",
   "date": "2026-05-25",
   "name": "ANCVisit1ReferralProtocol",
   "title": "ANC Visit 1 Referral Protocol",
+  "status": "active",
+  "version": "1.0.0",
+  "description": "Standalone referral chain protocol for ANC Visit 1 — tracks initiated, consultation and closure steps independently from the full RMNCH protocol.",
   "action": [
     {
       "id": "anc1-referral-initiated",
@@ -288,9 +292,5 @@
       ],
       "requiredBehavior": "must"
     }
-  ],
-  "status": "active",
-  "version": "1.0.0",
-  "description": "Standalone referral chain protocol for ANC Visit 1 — tracks initiated, consultation and closure steps independently from the full RMNCH protocol.",
-  "resourceType": "PlanDefinition"
+  ]
 }
