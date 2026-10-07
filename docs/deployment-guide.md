@@ -2,7 +2,7 @@
 
 Deploy **first**. The Matcher Service's migration declares foreign keys into `protocol_definition`,
 and the Step SLA Service validates its mapping against tables this service creates. Full ordering
-rationale: [Architecture Overview §6](../../cce-common-util/docs/architecture-overview.md#6-deployment-order).
+rationale: [Architecture Overview §6](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/architecture-overview.md#6-deployment-order).
 
 ## Requirements
 

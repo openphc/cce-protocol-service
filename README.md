@@ -39,13 +39,14 @@ System-wide context lives in **cce-common-util** and is not restated here:
 
 | For | See |
 |---|---|
-| Why the services are split, and how they coordinate | `cce-common-util` → [docs/architecture-overview.md](../cce-common-util/docs/architecture-overview.md) |
-| Schema, columns, enums, table ownership | `cce-common-util` → [docs/data-dictionary.md](../cce-common-util/docs/data-dictionary.md) |
-| `relatedAction` direction, status vocabularies, triggers, timing units | `cce-common-util` → [docs/fhir-conformance.md](../cce-common-util/docs/fhir-conformance.md) |
-| The shared entities, parser and exception handler this service uses | `cce-common-util` → [docs/library-reference.md](../cce-common-util/docs/library-reference.md) |
+| Why the services are split, and how they coordinate | `cce-common-util` → [docs/architecture-overview.md](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/architecture-overview.md) |
+| Schema, columns, enums, table ownership | `cce-common-util` → [docs/data-dictionary.md](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/data-dictionary.md) |
+| `relatedAction` direction, status vocabularies, triggers, timing units | `cce-common-util` → [docs/fhir-conformance.md](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/fhir-conformance.md) |
+| The shared entities, parser and exception handler this service uses | `cce-common-util` → [docs/library-reference.md](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/library-reference.md) |
 
-Cross-repository links assume the repositories are checked out as siblings, which is also what the
-Gradle composite build assumes.
+Cross-repository links go to the `openphc` repositories on GitHub, on `release-2.0.0`, so they work
+on GitHub as well as locally. The Gradle composite build does assume the repositories are checked
+out as siblings.
 
 ## API
 

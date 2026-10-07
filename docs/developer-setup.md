@@ -28,7 +28,7 @@ curl -s localhost:8090/actuator/health
 
 This service is **first** in the deployment order, so it can be brought up against an empty `ccedb`.
 The other two cannot. See
-[Data Dictionary §3](../../cce-common-util/docs/data-dictionary.md#3-ownership).
+[Data Dictionary §3](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/data-dictionary.md#3-ownership).
 
 ## Configuration
 
@@ -47,7 +47,7 @@ The other two cannot. See
 
 Some `cce.*` properties may appear live in this service without being used by it: the shared library
 declares beans that read them, and the component scan is widened to `org.openphc.cce`. See
-[Library Reference §7](../../cce-common-util/docs/library-reference.md#what-a-consumer-gets-whether-it-asks-or-not).
+[Library Reference §7](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/library-reference.md#what-a-consumer-gets-whether-it-asks-or-not).
 
 ## Project layout
 

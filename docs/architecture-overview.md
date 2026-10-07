@@ -4,7 +4,7 @@
 
 System-wide context — why the services are split, how they coordinate, the shared schema — lives in
 the **cce-common-util** repository's
-[Architecture Overview](../../cce-common-util/docs/architecture-overview.md). This document covers
+[Architecture Overview](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/architecture-overview.md). This document covers
 only what is specific to this service.
 
 ---
@@ -72,7 +72,7 @@ never leaves a partial row behind.
 
 The two warning cases are logged at load and are otherwise inert at runtime. The direction rules that
 make an edge meaningful are in
-[FHIR Conformance §1](../../cce-common-util/docs/fhir-conformance.md#1-relatedaction-direction).
+[FHIR Conformance §1](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/fhir-conformance.md#1-relatedaction-direction).
 
 ## 4. The trigger index
 
@@ -88,7 +88,7 @@ the only writer of `trigger_index` in one place.
 structural tuple to index; the Matcher Service holds those in memory and evaluates them per event.
 This service stores them only as part of the definition JSON.
 
-Column-level detail: [Data Dictionary §9](../../cce-common-util/docs/data-dictionary.md#9-trigger_index).
+Column-level detail: [Data Dictionary §9](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/data-dictionary.md#9-trigger_index).
 
 ## 5. Lifecycle
 
@@ -122,7 +122,7 @@ delete. The foreign key cannot race.
 ## 6. Cache invalidation contract
 
 The Matcher Service holds a parsed, derived form of each definition in memory
-([`ParsedProtocolCache`](../../cce-common-util/docs/library-reference.md#parsedprotocolcache)). This
+([`ParsedProtocolCache`](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/library-reference.md#parsedprotocolcache)). This
 service does not notify it — there is no call and no event.
 
 Instead the Matcher Service **polls** for definitional changes and evicts what it finds. The
@@ -157,7 +157,7 @@ rows and the protocol lifecycle is traceable through the service logs and the de
 
 Being first in the deployment order is not incidental — the Matcher Service's migration declares
 foreign keys into `protocol_definition`. See
-[Data Dictionary §3](../../cce-common-util/docs/data-dictionary.md#3-ownership).
+[Data Dictionary §3](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/data-dictionary.md#3-ownership).
 
 ## 9. Security
 

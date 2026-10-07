@@ -4,7 +4,7 @@ Base URL: `http://<host>:8090`
 Content type: `application/json` on request and response.
 
 All error bodies and their status codes come from the shared `GlobalExceptionHandler` — see
-[Library Reference §5](../../cce-common-util/docs/library-reference.md#5-exception) for the mapping and the
+[Library Reference §5](https://github.com/openphc/cce-common-util/blob/release-2.0.0/docs/library-reference.md#5-exception) for the mapping and the
 body shape. Only status codes that carry service-specific meaning are called out below.
 
 No authentication is enforced at the application layer; see
