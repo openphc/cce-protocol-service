@@ -61,6 +61,7 @@ public class ProtocolDefinitionService {
         planDefinitionParser.validateActionIds(planDefinition);
         planDefinitionParser.validateActionTypes(planDefinition);
         planDefinitionParser.validateTriggers(planDefinition);
+        planDefinitionParser.validateGroups(planDefinition);
         // Only a mandatory step can be late, so only a mandatory step may carry a deadline. Rejected
         // here rather than ignored downstream: an author who writes tolerance-days on an optional
         // action believes a deadline is being enforced, and nothing later would tell them otherwise.
@@ -239,14 +240,15 @@ public class ProtocolDefinitionService {
      */
     private void warnOnInertRelatedActions(PlanDefinition planDefinition) {
         List<PlanDefinitionParser.StepMetadata> steps = planDefinitionParser.extractSteps(planDefinition);
+        List<PlanDefinitionParser.GroupMetadata> groups = planDefinitionParser.extractGroups(planDefinition);
 
-        for (String dangling : PlanDefinitionParser.findDanglingRelatedActions(steps)) {
+        for (String dangling : PlanDefinitionParser.findDanglingRelatedActions(steps, groups)) {
             log.warn("Protocol {} has a relatedAction naming an action that does not exist — it is "
                             + "ignored and establishes no ordering: {}",
                     planDefinition.getUrl(), dangling);
         }
 
-        for (String unordered : PlanDefinitionParser.findUnorderedRelationships(steps)) {
+        for (String unordered : PlanDefinitionParser.findUnorderedRelationships(steps, groups)) {
             log.warn("Protocol {} has a concurrent-* relatedAction, which states no ordering — it "
                             + "will NOT sequence these steps. Use after-*/before-* if one must "
                             + "follow the other: {}",

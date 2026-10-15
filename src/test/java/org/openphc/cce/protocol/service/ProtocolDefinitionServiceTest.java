@@ -94,6 +94,22 @@ class ProtocolDefinitionServiceTest {
     }
 
     @Test
+    void loadProtocol_invalidStepGroup_throwsIllegalArgument() {
+        // A group with a trigger, say: it would never be matched, and its steps would be refused
+        // nothing. Refused at load, before anything is persisted.
+        PlanDefinition planDef = mockPlanDefinitionMinimal("http://openphc.org/test", "1.0.0");
+        when(planDefinitionParser.parse(planDefinitionJson)).thenReturn(planDef);
+        doThrow(new IllegalArgumentException("Group 'visit-2' has a trigger."))
+                .when(planDefinitionParser).validateGroups(planDef);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> service.loadProtocol(planDefinitionJson));
+        assertTrue(ex.getMessage().contains("visit-2"));
+
+        verify(protocolDefinitionRepository, never()).save(any());
+    }
+
+    @Test
     void loadProtocol_optionalActionWithADeadline_throwsIllegalArgument() {
         // Only a mandatory step can be late, so a deadline on an optional action enforces nothing.
         // Refused at load: nothing downstream would ever tell the author their SLA is inert.
@@ -275,6 +291,7 @@ class ProtocolDefinitionServiceTest {
         verify(planDefinitionParser).validateActionIds(planDef);
         verify(planDefinitionParser).validateActionTypes(planDef);
         verify(planDefinitionParser).validateTriggers(planDef);
+        verify(planDefinitionParser).validateGroups(planDef);
         verify(planDefinitionParser).validateOptionalStepDeadlines(planDef);
     }
 
