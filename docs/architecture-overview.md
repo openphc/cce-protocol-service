@@ -45,7 +45,8 @@ flowchart TD
     B --> C["validateActionIds<br/>unique across the whole document"]
     C --> D["validateActionTypes<br/>every action declares step or fire-event"]
     D --> E["validateTriggers<br/>reject a trigger with neither data[] nor condition,<br/>or a codeFilter.path no event is read for"]
-    E --> E2["validateOptionalStepDeadlines<br/>no tolerance-days on a non-must action"]
+    E --> EG["validateGroups<br/>step groups that cannot work, and group features not built yet"]
+    EG --> E2["validateOptionalStepDeadlines<br/>no tolerance-days on a non-must action"]
     E2 --> F["warn on inert relatedActions<br/>concurrent-* and dangling edges"]
     F --> G{"(url, version)<br/>already loaded?"}
     G -->|yes| H["409-worthy: IllegalArgumentException → 400"]
@@ -66,6 +67,9 @@ never leaves a partial row behind.
 | Unknown FHIR resource type in a trigger | reject | Would create an index row no inbound event could match |
 | `codeFilter.path` that is not a single top-level field name (e.g. `participant.type`, `type[0]`) | reject | The Matcher reads an event one top-level field at a time, so such a row is indexed and never matched, and since **every** codeFilter of an action must match, it disables the action rather than narrowing it. A protocol that loads cleanly and silently never enrols anyone is worse than one that is refused. Any plain field name is accepted; a misspelt one loads and simply never matches |
 | `tolerance-days` on an action that is not `requiredBehavior: "must"` | reject | A deadline is the point at which *required* work has not been recorded, so only a mandatory step can breach one. Matcher schedules no SLA transition for an optional step, so the extension would enforce nothing while the author believes it does. Fixed by declaring `"must"` or dropping the extension. An absent `requiredBehavior` is not mandatory |
+| A step group (`groupingBehavior: logical-group`) with a trigger, with no step inside it, on a `fire-event` action, or with a `selectionBehavior` other than `all` | reject | A group is never matched to an event, completes when its mandatory steps are done, and has members; any of these would describe a group that can't work |
+| `tolerance-days` on an optional group, or on a group with the `cycle-boundary` extension | reject | Nothing is required of an optional group, and a visit-driven cycle has no planned due date, so either deadline would enforce nothing |
+| `timing` or the `cycle-boundary` extension on a group, `tolerance-days` on a group, a `fire-event` child of a group, or any action that follows a group | reject, until built | Repeating groups, group deadlines, intelligence on groups and group completion are not built yet. Refusing them means an author never believes one is in effect. Each check is lifted when its feature ships |
 | `concurrent-*` relatedAction | **warn** | Establishes no ordering; previously accepted, so rejecting would break an upstream publisher |
 | `relatedAction` naming an unknown action | **warn** | Same |
 | Body that the FHIR parser accepts but Jackson cannot re-read | reject | Nothing storable — fails rather than persisting an empty definition body |
