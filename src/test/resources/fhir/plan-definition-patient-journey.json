@@ -1,0 +1,167 @@
+{
+  "resourceType": "PlanDefinition",
+  "id": "patient-journey",
+  "url": "http://openphc.org/PlanDefinition/patient-journey",
+  "version": "1.0.0",
+  "name": "PatientJourney",
+  "title": "Outpatient journey with visit-driven repeats",
+  "status": "active",
+  "description": "Fixture for visit-driven step groups: a journey that repeats by calendar-day, holding a check-in and a Consultation that repeats by entry-step. History is the Consultation's entry step; examination follows it.",
+  "action": [
+    {
+      "id": "journey",
+      "title": "Patient journey",
+      "requiredBehavior": "must",
+      "groupingBehavior": "logical-group",
+      "extension": [
+        {
+          "url": "http://openphc.org/fhir/StructureDefinition/cycle-boundary",
+          "valueCode": "calendar-day"
+        }
+      ],
+      "type": {
+        "coding": [
+          {
+            "system": "http://openphc.org/fhir/CodeSystem/action-type",
+            "code": "step"
+          }
+        ]
+      },
+      "action": [
+        {
+          "id": "check-in",
+          "title": "Check-in",
+          "requiredBehavior": "must",
+          "trigger": [
+            {
+              "type": "named-event",
+              "name": "check-in-trigger",
+              "data": [
+                {
+                  "type": "Encounter",
+                  "codeFilter": [
+                    {
+                      "path": "type",
+                      "code": [
+                        {
+                          "system": "http://openphc.org/encounter-types",
+                          "code": "opd-check-in"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": {
+            "coding": [
+              {
+                "system": "http://openphc.org/fhir/CodeSystem/action-type",
+                "code": "step"
+              }
+            ]
+          }
+        },
+        {
+          "id": "consultation",
+          "title": "Consultation",
+          "requiredBehavior": "must",
+          "groupingBehavior": "logical-group",
+          "extension": [
+            {
+              "url": "http://openphc.org/fhir/StructureDefinition/cycle-boundary",
+              "valueCode": "entry-step"
+            }
+          ],
+          "type": {
+            "coding": [
+              {
+                "system": "http://openphc.org/fhir/CodeSystem/action-type",
+                "code": "step"
+              }
+            ]
+          },
+          "action": [
+            {
+              "id": "history",
+              "title": "History",
+              "requiredBehavior": "must",
+              "trigger": [
+                {
+                  "type": "named-event",
+                  "name": "history-trigger",
+                  "data": [
+                    {
+                      "type": "Observation",
+                      "codeFilter": [
+                        {
+                          "path": "code",
+                          "code": [
+                            {
+                              "system": "http://loinc.org",
+                              "code": "10164-2"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": {
+                "coding": [
+                  {
+                    "system": "http://openphc.org/fhir/CodeSystem/action-type",
+                    "code": "step"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "examination",
+              "title": "Examination",
+              "requiredBehavior": "must",
+              "relatedAction": [
+                {
+                  "actionId": "history",
+                  "relationship": "after-end"
+                }
+              ],
+              "trigger": [
+                {
+                  "type": "named-event",
+                  "name": "examination-trigger",
+                  "data": [
+                    {
+                      "type": "Observation",
+                      "codeFilter": [
+                        {
+                          "path": "code",
+                          "code": [
+                            {
+                              "system": "http://loinc.org",
+                              "code": "29545-1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": {
+                "coding": [
+                  {
+                    "system": "http://openphc.org/fhir/CodeSystem/action-type",
+                    "code": "step"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
