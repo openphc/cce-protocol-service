@@ -80,6 +80,28 @@ class VisitDrivenGroupLoadTest {
     }
 
     @Test
+    void loadProtocol_rwandaHealthCenterServiceProtocol_isLoaded() throws IOException {
+        // The service protocol for Rwanda's health centers: an outpatient visit per calendar day.
+        String rwandaJson;
+        try (InputStream is = getClass().getResourceAsStream("/fhir/rwanda-outpatient-journey-step-groups.json")) {
+            assertNotNull(is, "Test fixture not found");
+            rwandaJson = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
+        when(protocolDefinitionRepository.findByUrlAndVersion(any(), any())).thenReturn(Optional.empty());
+        when(protocolDefinitionRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        ProtocolDefinition saved = service.loadProtocol(rwandaJson);
+
+        assertEquals(ProtocolDefinitionStatus.ACTIVE, saved.getStatus());
+        // Every step is indexed, sub-steps included. The visit group is not.
+        ArgumentCaptor<List<TriggerIndex>> captor = ArgumentCaptor.forClass(List.class);
+        verify(triggerIndexRepository).saveAll(captor.capture());
+        assertEquals(List.of("chief-complaints", "consultation", "diagnosis", "history-assessment", "lab-order",
+                        "lab-results", "referral", "treatment", "visit-encounter", "vitals-recording"),
+                captor.getValue().stream().map(row -> row.getId().getActionId()).distinct().sorted().toList());
+    }
+
+    @Test
     void loadProtocol_calendarDayGroupInsideARepeatingGroup_isRejected() {
         // Every event of one visit falls on the same day, so a Consultation repeating by calendar-day
         // inside a calendar-day journey could never start a second cycle.
